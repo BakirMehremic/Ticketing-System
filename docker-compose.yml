@@ -1,0 +1,27 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: backend.Dockerfile
+    ports:
+      - "5172:5172"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=postgres;Database=ticketingdb;Username=postgres;Password=postgres
+      - ConnectionStrings__RedisConnection=redis:6379
+      - ASPNETCORE_URLS=http://+:5172
+    depends_on:
+      - postgres
+      - redis
+      
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ticketingdb
+
+  redis:
+    image: redis:alpine
+#    ports:
+#      - "6379:6379"
